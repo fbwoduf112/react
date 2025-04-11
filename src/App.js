@@ -19,8 +19,9 @@ function Nav(props){
     let t = props.topics[i];
     lis.push(<li key={t.id}><a href={'/read/'+t.id} onClick={event=>{
       event.preventDefault();
-      props.onchangeMode(event.target.id);
-    }}>{t.title}</a></li>);
+      props.onchangeMode(Number(event.target.id));
+    }}>{t.title}</a>
+    </li>);
   }
 
   return(
@@ -43,7 +44,7 @@ function Article(props){
 
 function App() {
   const [mode, setMode] = useState('WELCOME');
-  console.log('mode', mode);
+  const [id, setId] = useState(null);
   const topics = [
     {id:1, title:'html', body:'html is ....'},
     {id:2, title:'css', body:'css is ....'},
@@ -53,17 +54,27 @@ function App() {
   if(mode === "WELCOME"){
     content = <Article title="Welcome" body="Hello, Web"></Article>
   }else if(mode === "READ"){
-      content = <Article title="Welcome" body="Hello, Read"></Article>
+    let title, body = null;
+    for(let i=0; i<topics.length; i++){
+      console.log(topics[i].id, id);
+      if(topics[i].id === id){
+        title = topics[i].title;
+        body = topics[i].body;
+      }
     }
+    content = <Article title ={title} body={body}></Article>   
+  }
 
   return (
     <div>
       <Header title="WEB" onchangeMode={function(){
         setMode('WELCOME');
       }}></Header>
-      <Nav topics={topics} onchangeMode={function(){
+      <Nav topics={topics} onchangeMode={(_id)=>{
         setMode('READ');
-      }}></Nav>
+        setId(_id);
+      }
+      }></Nav>
       {content}
     </div>
   );
