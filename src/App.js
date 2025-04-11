@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
 function Header(props) {
   console.log('props', props.title)
@@ -41,21 +42,29 @@ function Article(props){
 }
 
 function App() {
+  const [mode, setMode] = useState('WELCOME');
+  console.log('mode', mode);
   const topics = [
     {id:1, title:'html', body:'html is ....'},
     {id:2, title:'css', body:'css is ....'},
     {id:3, title:'javascript', body:'javascript is ....'}
   ]
+  let content = null;
+  if(mode === "WELCOME"){
+    content = <Article title="Welcome" body="Hello, Web"></Article>
+  }else if(mode === "READ"){
+      content = <Article title="Welcome" body="Hello, Read"></Article>
+    }
 
   return (
     <div>
       <Header title="WEB" onchangeMode={function(){
-        alert('Header');
+        setMode('WELCOME');
       }}></Header>
       <Nav topics={topics} onchangeMode={function(){
-        alert('Nav');
+        setMode('READ');
       }}></Nav>
-      <Article title="Welcome" body="Hello, Web"></Article>
+      {content}
     </div>
   );
 }
